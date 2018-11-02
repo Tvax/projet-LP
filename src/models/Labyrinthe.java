@@ -1,4 +1,6 @@
-package model;
+package models;
+
+import models.cases.Case;
 
 import java.util.HashMap;
 
