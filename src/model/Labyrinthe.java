@@ -1,7 +1,9 @@
+package model;
+
 import java.util.HashMap;
 
 public class Labyrinthe {
-    HashMap cases = new HashMap<>();
+    HashMap hashMapCase = new HashMap<>();
 
     public Labyrinthe(int numberOfCase) {
         initHashMap(numberOfCase);
@@ -9,7 +11,7 @@ public class Labyrinthe {
 
     private void initHashMap(int cases) {
         for (int i = 0; i < cases; i++) {
-            cases.put(new Integer(i), new Case());
+            hashMapCase.put(i, new Case());
         }
     }
 }
