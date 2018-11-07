@@ -10,12 +10,13 @@ import java.awt.*;
 import java.util.HashMap;
 
 public class Labyrinth implements LabyrinthListener, KeyboardArrowListener {
-    private int currentCase;
-    private GridLayout gridLayout;
+    private int caseAmount;
+    private Position currentPosition;
     private HashMap<Position, Case> hashMapCase = new HashMap<>();
     private JPanel jPanel;
 
     Labyrinth(int caseAmount) {
+        this.caseAmount = caseAmount;
         initView(caseAmount);
         initHashMap(caseAmount);
     }
@@ -66,12 +67,16 @@ public class Labyrinth implements LabyrinthListener, KeyboardArrowListener {
 
     @Override
     public void UpKey() {
+        if(currentPosition.getY() != 0){
 
+        }
     }
 
     @Override
     public void DownKey() {
+        if(currentPosition.getY() != caseAmount){
 
+        }
     }
 
     @Override
@@ -84,7 +89,19 @@ public class Labyrinth implements LabyrinthListener, KeyboardArrowListener {
 
     }
 
-    public JPanel getComponent(){
+    private void moveUp(){
+        while(hashMapCase.keySet().iterator().hasNext()){
+            Position position = hashMapCase.keySet().iterator().next();
+
+
+        }
+    }
+
+    private void writeCase(ImageIcon imageIcon, Position position){
+
+    }
+
+    JPanel getComponent(){
         return jPanel;
     }
 }
