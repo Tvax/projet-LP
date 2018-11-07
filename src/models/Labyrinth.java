@@ -5,8 +5,10 @@ import models.cases.FinishCase;
 import models.cases.StartCase;
 import models.listeners.KeyboardArrowListener;
 import models.listeners.LabyrinthListener;
+import utils.Tools;
 
 import javax.swing.*;
+import javax.tools.Tool;
 import java.awt.*;
 import java.nio.file.Files;
 import java.util.HashMap;
@@ -25,15 +27,26 @@ public class Labyrinth implements LabyrinthListener, KeyboardArrowListener {
     }
 
     private void initHashMap(int cases) {
-        for (int currentY = 0; currentY < cases; currentY++) {
-            for (int currentX = 0; currentX < cases; currentX++){
-                Case aCase = new Case(currentY + currentX);
-                hashMapCase.put(new Position(currentY, currentX), aCase);
-                GridBagConstraints gridBagConstraints = new GridBagConstraints();
-                gridBagConstraints.gridy = currentY;
-                gridBagConstraints.gridx = currentX;
-                jPanel.add(aCase.getComponent(), gridBagConstraints, aCase.getID());
-            }
+        hashMapCase = Tools.getLabFromFile();
+//        for (int currentY = 0; currentY < cases; currentY++) {
+//            for (int currentX = 0; currentX < cases; currentX++){
+//                Case aCase = new Case(currentY + currentX);
+//                hashMapCase.put(new Position(currentY, currentX), aCase);
+//                GridBagConstraints gridBagConstraints = new GridBagConstraints();
+//                gridBagConstraints.gridy = currentY;
+//                gridBagConstraints.gridx = currentX;
+//                jPanel.add(aCase.getComponent(), gridBagConstraints, aCase.getID());
+//            }
+//        }
+
+        for (Position position: hashMapCase.keySet()){
+            GridBagConstraints gridBagConstraints = new GridBagConstraints();
+            gridBagConstraints.gridy = position.getY();
+            gridBagConstraints.gridx = position.getX();
+
+            Case case1 = hashMapCase.get(position);
+
+            jPanel.add(case1.getComponent(), gridBagConstraints, case1.getID());
         }
 
         movePlayer(new Position(1, 0));
@@ -86,20 +99,24 @@ public class Labyrinth implements LabyrinthListener, KeyboardArrowListener {
     }
 
     private void movePlayer(Position futurePosition){
-        GridBagConstraints gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridy = currentPosition.getY();
-        gridBagConstraints.gridx = currentPosition.getX();
-        jPanel.remove(currentPosition.getY()+currentPosition.getX());
-        jPanel.add(new Case(currentPosition.getY()+currentPosition.getX()).getComponent(), gridBagConstraints, currentPosition.getY()+currentPosition.getX());
+        try {
+            GridBagConstraints gridBagConstraints = new GridBagConstraints();
+            gridBagConstraints.gridy = currentPosition.getY();
+            gridBagConstraints.gridx = currentPosition.getX();
+            jPanel.remove(currentPosition.getY() + currentPosition.getX());
+            jPanel.add(new Case(currentPosition.getY() + currentPosition.getX()).getComponent(), gridBagConstraints, currentPosition.getY() + currentPosition.getX());
 
-        GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-        gridBagConstraints1.gridy = futurePosition.getY();
-        gridBagConstraints1.gridx = futurePosition.getX();
-        currentPosition = futurePosition;
-        jPanel.remove(currentPosition.getY()+currentPosition.getX());
-        jPanel.add(new StartCase(futurePosition.getY()+futurePosition.getX()).getComponent(), gridBagConstraints1, currentPosition.getY()+currentPosition.getX());
-        jPanel.repaint();
-        jPanel.revalidate();
+            GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+            gridBagConstraints1.gridy = futurePosition.getY();
+            gridBagConstraints1.gridx = futurePosition.getX();
+            currentPosition = futurePosition;
+            jPanel.remove(currentPosition.getY() + currentPosition.getX());
+            jPanel.add(new StartCase(futurePosition.getY() + futurePosition.getX()).getComponent(), gridBagConstraints1, currentPosition.getY() + currentPosition.getX());
+            jPanel.repaint();
+            jPanel.revalidate();
+        }catch (Exception e){
+
+        }
     }
 
     private Case getCaseForPosition(Position position){
