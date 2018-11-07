@@ -1,12 +1,14 @@
 package models;
 
 import models.cases.Case;
+import models.cases.FinishCase;
 import models.cases.StartCase;
 import models.listeners.KeyboardArrowListener;
 import models.listeners.LabyrinthListener;
 
 import javax.swing.*;
 import java.awt.*;
+import java.nio.file.Files;
 import java.util.HashMap;
 
 public class Labyrinth implements LabyrinthListener, KeyboardArrowListener {
@@ -17,6 +19,7 @@ public class Labyrinth implements LabyrinthListener, KeyboardArrowListener {
 
     Labyrinth(int caseAmount) {
         this.caseAmount = caseAmount;
+        this.currentPosition = new Position(0, 0);
         initView(caseAmount);
         initHashMap(caseAmount);
     }
@@ -29,14 +32,11 @@ public class Labyrinth implements LabyrinthListener, KeyboardArrowListener {
                 GridBagConstraints gridBagConstraints = new GridBagConstraints();
                 gridBagConstraints.gridy = currentY;
                 gridBagConstraints.gridx = currentX;
-                jPanel.add(aCase.getComponent(), gridBagConstraints);
+                jPanel.add(aCase.getComponent(), gridBagConstraints, aCase.getID());
             }
         }
 
-        GridBagConstraints gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridx = 0;
-        jPanel.add(new StartCase(44).getComponent(), gridBagConstraints);
+        movePlayer(new Position(1, 0));
     }
 
     private void initView(int caseAmount){
@@ -67,34 +67,88 @@ public class Labyrinth implements LabyrinthListener, KeyboardArrowListener {
 
     @Override
     public void UpKey() {
-        if(currentPosition.getY() != 0){
-
-        }
+        moveUp();
     }
 
     @Override
     public void DownKey() {
-        if(currentPosition.getY() != caseAmount){
-
-        }
+        moveDown();
     }
 
     @Override
     public void LeftKey() {
-
+        moveLeft();
     }
 
     @Override
     public void RightKey() {
+        moveRight();
+    }
 
+    private void movePlayer(Position futurePosition){
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridy = currentPosition.getY();
+        gridBagConstraints.gridx = currentPosition.getX();
+        jPanel.remove(currentPosition.getY()+currentPosition.getX());
+        jPanel.add(new Case(currentPosition.getY()+currentPosition.getX()).getComponent(), gridBagConstraints, currentPosition.getY()+currentPosition.getX());
+
+        GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+        gridBagConstraints1.gridy = futurePosition.getY();
+        gridBagConstraints1.gridx = futurePosition.getX();
+        currentPosition = futurePosition;
+        jPanel.remove(currentPosition.getY()+currentPosition.getX());
+        jPanel.add(new StartCase(futurePosition.getY()+futurePosition.getX()).getComponent(), gridBagConstraints1, currentPosition.getY()+currentPosition.getX());
+        jPanel.repaint();
+        jPanel.revalidate();
+    }
+
+    private Case getCaseForPosition(Position position){
+        for(Position pos: hashMapCase.keySet()){
+            if(pos.equals(position)){
+                return hashMapCase.get(position);
+            }
+        }
+        return null;
+    }
+
+    private void moveDown(){
+        if(currentPosition.getY() != caseAmount) {
+            Position position = new Position(currentPosition);
+            position.setY(position.getY() + 1);
+            movePlayer(position);
+        }
+    }
+
+    private void moveRight(){
+        if(currentPosition.getX() != caseAmount) {
+            Position position = new Position(currentPosition);
+            position.setX(position.getX() + 1);
+            movePlayer(position);
+        }
+    }
+
+    private void moveLeft(){
+        if(currentPosition.getX() != 0) {
+            Position position = new Position(currentPosition);
+            position.setX(position.getX() - 1);
+            movePlayer(position);
+        }
     }
 
     private void moveUp(){
-        while(hashMapCase.keySet().iterator().hasNext()){
-            Position position = hashMapCase.keySet().iterator().next();
+//        Case case1 = hashMapCase.get(new Position(currentPosition.getY() -1, currentPosition.getX()));
+//        Case case1 = getCaseForPosition(currentPosition);
 
-
+        if(currentPosition.getY() != 0) {
+            Position position = new Position(currentPosition);
+            position.setY(position.getY() - 1);
+            movePlayer(position);
         }
+
+//        while(hashMapCase.keySet().iterator().hasNext()){
+//            Position position = hashMapCase.keySet().iterator().next();
+////            if (position.getY() == )
+//        }
     }
 
     private void writeCase(ImageIcon imageIcon, Position position){
