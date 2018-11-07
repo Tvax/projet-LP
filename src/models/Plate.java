@@ -1,12 +1,15 @@
 package models;
 
+import models.listeners.KeyboardArrowListener;
 import utils.Constants;
 import utils.Strings;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-public class Plate {
+public class Plate implements KeyboardArrowListener {
     private Labyrinth labyrinthe1;
     private Labyrinth labyrinthe2;
     private JFrame frame;
@@ -24,6 +27,7 @@ public class Plate {
         frame.setLayout(new FlowLayout());
         frame.add(getBasejPanel());
         frame.setSize(400, 300);
+        frame.addKeyListener(getKeyListener());
         frame.pack();
         frame.setVisible(true);
     }
@@ -39,10 +43,69 @@ public class Plate {
 
         JPanel jPanel = new JPanel();
         jPanel.setLayout(gridLayout);
+//        jPanel.addKeyListener(getKeyListener());
 
         jPanel.add(labyrinthe1.getComponent());
-        jPanel.add(labyrinthe2.getComponent());
+//        jPanel.add(labyrinthe2.getComponent());
 
         return jPanel;
+    }
+
+    private KeyListener getKeyListener(){
+        return new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent keyEvent) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent keyEvent) {
+                switch (keyEvent.getKeyCode()){
+                    case KeyEvent.VK_UP:
+                        labyrinthe1.UpKey();
+                        labyrinthe2.UpKey();
+                        break;
+                    case KeyEvent.VK_DOWN:
+                        labyrinthe1.DownKey();
+                        labyrinthe2.DownKey();
+                        break;
+                    case KeyEvent.VK_RIGHT:
+                        labyrinthe1.RightKey();
+                        labyrinthe2.RightKey();
+                        break;
+                    case KeyEvent.VK_LEFT:
+                        labyrinthe1.LeftKey();
+                        labyrinthe2.LeftKey();
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent keyEvent) {
+
+            }
+        };
+    }
+
+    @Override
+    public void UpKey() {
+
+    }
+
+    @Override
+    public void DownKey() {
+
+    }
+
+    @Override
+    public void LeftKey() {
+
+    }
+
+    @Override
+    public void RightKey() {
+
     }
 }
