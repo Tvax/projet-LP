@@ -6,6 +6,8 @@ import utils.Strings;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -22,12 +24,36 @@ public class Plate implements KeyboardArrowListener {
     }
 
     private void initWindow(){
+
+        final JButton clic = new JButton("Cliquer");
+
         frame = new JFrame(Strings.window_name);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new FlowLayout());
         frame.add(getBasejPanel());
         frame.setSize(400, 300);
         frame.addKeyListener(getKeyListener());
+
+        JMenuBar menubar1 =new JMenuBar();
+        JMenu menu1=new JMenu("Fichier");
+        JMenuItem recommencer=new JMenuItem("Recommencer");
+        menu1.add(recommencer);
+        menubar1.add(menu1);
+        frame.setJMenuBar(menubar1);
+
+        /* Action réaliser par l'ihm */
+        /* clic sur le bouton clic */
+        clic.addActionListener(e -> System.out.println("1 clic"));
+        /* clic sur le choix recommencer du menu fichier */
+        recommencer.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                clic.setEnabled(true);
+            }
+        });
+
+
         frame.pack();
         frame.setVisible(true);
     }

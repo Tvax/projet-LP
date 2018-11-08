@@ -46,7 +46,7 @@ public class Labyrinth implements LabyrinthListener, KeyboardArrowListener {
 
             Case case1 = hashMapCase.get(position);
 
-            jPanel.add(case1.getComponent(), gridBagConstraints, case1.getID());
+            jPanel.add(case1.getComponent(), gridBagConstraints);
         }
 
         movePlayer(new Position(1, 0));
@@ -70,6 +70,7 @@ public class Labyrinth implements LabyrinthListener, KeyboardArrowListener {
 
     @Override
     public void onGameStarted() {
+
 
     }
 
@@ -99,6 +100,10 @@ public class Labyrinth implements LabyrinthListener, KeyboardArrowListener {
     }
 
     private void movePlayer(Position futurePosition){
+        /*JOptionPane jop1;
+        jop1 = new JOptionPane();
+        jop1.showMessageDialog(null, "Félicitation, vous avez déplacé votre joueur !!!!", "Information", JOptionPane.INFORMATION_MESSAGE);*/
+
         try {
             GridBagConstraints gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridy = currentPosition.getY();
