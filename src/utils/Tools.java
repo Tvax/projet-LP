@@ -1,7 +1,7 @@
 package utils;
 
 import models.Position;
-import models.cases.Case;
+import models.cases.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -70,6 +70,18 @@ public final class Tools {
         switch (id){
             case 0:
                 return new Case(id);
+            case 1:
+                return new PlayerCase(id);
+            case 2:
+                return new FinishCase(id);
+            case 3:
+                return new GapCase(id);
+            case 4:
+                return new StartCase(id);
+            case 5:
+                return new WallCase(id);
+            case 6:
+                return new CaisseCase(id);
             default:
                 return new Case(id);
         }

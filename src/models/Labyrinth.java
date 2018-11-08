@@ -1,43 +1,34 @@
 package models;
 
+import models.cases.PlayerCase;
 import models.cases.Case;
-import models.cases.FinishCase;
-import models.cases.StartCase;
 import models.listeners.KeyboardArrowListener;
 import models.listeners.LabyrinthListener;
 import utils.Tools;
 
 import javax.swing.*;
-import javax.tools.Tool;
 import java.awt.*;
-import java.nio.file.Files;
 import java.util.HashMap;
 
 public class Labyrinth implements LabyrinthListener, KeyboardArrowListener {
-    private int caseAmount;
+    private int maxY = 0;
+    private int maxX = 0;
     private Position currentPosition;
     private HashMap<Position, Case> hashMapCase = new HashMap<>();
     private JPanel jPanel;
 
     Labyrinth(int caseAmount) {
-        this.caseAmount = caseAmount;
         this.currentPosition = new Position(0, 0);
-        initView(caseAmount);
-        initHashMap(caseAmount);
+        initView();
+        initHashMap();
     }
 
-    private void initHashMap(int cases) {
+    Labyrinth(){
+        this(0);
+    }
+
+    private void initHashMap() {
         hashMapCase = Tools.getLabFromFile();
-//        for (int currentY = 0; currentY < cases; currentY++) {
-//            for (int currentX = 0; currentX < cases; currentX++){
-//                Case aCase = new Case(currentY + currentX);
-//                hashMapCase.put(new Position(currentY, currentX), aCase);
-//                GridBagConstraints gridBagConstraints = new GridBagConstraints();
-//                gridBagConstraints.gridy = currentY;
-//                gridBagConstraints.gridx = currentX;
-//                jPanel.add(aCase.getComponent(), gridBagConstraints, aCase.getID());
-//            }
-//        }
 
         for (Position position: hashMapCase.keySet()){
             GridBagConstraints gridBagConstraints = new GridBagConstraints();
@@ -46,21 +37,22 @@ public class Labyrinth implements LabyrinthListener, KeyboardArrowListener {
 
             Case case1 = hashMapCase.get(position);
 
-            jPanel.add(case1.getComponent(), gridBagConstraints, case1.getID());
+            jPanel.add(case1.getComponent(), gridBagConstraints);
+
+            if (maxX < position.getX()){
+                maxX = position.getX();
+            }
+
+            if (maxY < position.getY()){
+                maxY = position.getY();
+            }
         }
 
         movePlayer(new Position(1, 0));
     }
 
-    private void initView(int caseAmount){
-//        gridLayout = new GridLayout(caseAmount, caseAmount/2);
+    private void initView(){
         jPanel = new JPanel(new GridBagLayout());
-//        for (Case aCase : hashMapCase.values()){
-//            GridBagConstraints gridBagConstraints = new GridBagConstraints();
-//            gridBagConstraints.gridx = 0;
-//            gridBagConstraints.gridy = 0;
-//            jPanel.add(aCase.getComponent(), gridBagConstraints);
-//        }
     }
 
     @Override
@@ -104,14 +96,14 @@ public class Labyrinth implements LabyrinthListener, KeyboardArrowListener {
             gridBagConstraints.gridy = currentPosition.getY();
             gridBagConstraints.gridx = currentPosition.getX();
             jPanel.remove(currentPosition.getY() + currentPosition.getX());
-            jPanel.add(new Case(currentPosition.getY() + currentPosition.getX()).getComponent(), gridBagConstraints, currentPosition.getY() + currentPosition.getX());
+            jPanel.add(getCaseForPosition(currentPosition).getComponent(), gridBagConstraints, currentPosition.getY() + currentPosition.getX());
 
             GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
             gridBagConstraints1.gridy = futurePosition.getY();
             gridBagConstraints1.gridx = futurePosition.getX();
             currentPosition = futurePosition;
             jPanel.remove(currentPosition.getY() + currentPosition.getX());
-            jPanel.add(new StartCase(futurePosition.getY() + futurePosition.getX()).getComponent(), gridBagConstraints1, currentPosition.getY() + currentPosition.getX());
+            jPanel.add(new PlayerCase(futurePosition.getY() + futurePosition.getX()).getComponent(), gridBagConstraints1, currentPosition.getY() + currentPosition.getX());
             jPanel.repaint();
             jPanel.revalidate();
         }catch (Exception e){
@@ -125,11 +117,11 @@ public class Labyrinth implements LabyrinthListener, KeyboardArrowListener {
                 return hashMapCase.get(position);
             }
         }
-        return null;
+        return new Case(currentPosition.getY() + currentPosition.getX());
     }
 
     private void moveDown(){
-        if(currentPosition.getY() != caseAmount) {
+        if(currentPosition.getY() != maxY) {
             Position position = new Position(currentPosition);
             position.setY(position.getY() + 1);
             movePlayer(position);
@@ -137,7 +129,7 @@ public class Labyrinth implements LabyrinthListener, KeyboardArrowListener {
     }
 
     private void moveRight(){
-        if(currentPosition.getX() != caseAmount) {
+        if(currentPosition.getX() != maxX) {
             Position position = new Position(currentPosition);
             position.setX(position.getX() + 1);
             movePlayer(position);
@@ -153,19 +145,11 @@ public class Labyrinth implements LabyrinthListener, KeyboardArrowListener {
     }
 
     private void moveUp(){
-//        Case case1 = hashMapCase.get(new Position(currentPosition.getY() -1, currentPosition.getX()));
-//        Case case1 = getCaseForPosition(currentPosition);
-
         if(currentPosition.getY() != 0) {
             Position position = new Position(currentPosition);
             position.setY(position.getY() - 1);
             movePlayer(position);
         }
-
-//        while(hashMapCase.keySet().iterator().hasNext()){
-//            Position position = hashMapCase.keySet().iterator().next();
-////            if (position.getY() == )
-//        }
     }
 
     private void writeCase(ImageIcon imageIcon, Position position){

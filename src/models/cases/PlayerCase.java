@@ -5,14 +5,14 @@ import utils.Tools;
 
 import javax.swing.*;
 
-public class BusyCase extends Case {
+public class PlayerCase extends Case {
 
-    public BusyCase(int id) {
+    public PlayerCase(int id) {
         super(id);
     }
 
     @Override
     public ImageIcon getImage() {
-        return Tools.getImageIcon(Constants.GREEN_SLOT_PATH, this.getClass());
+        return Tools.getImageIcon(Constants.PLAYER_SLOT_PATH, this.getClass());
     }
 }
