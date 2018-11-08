@@ -91,6 +91,10 @@ public class Labyrinth implements LabyrinthListener, KeyboardArrowListener {
     }
 
     private void movePlayer(Position futurePosition){
+        /*JOptionPane jop1;
+        jop1 = new JOptionPane();
+        jop1.showMessageDialog(null, "Félicitation, vous avez déplacé votre joueur !!!!", "Information", JOptionPane.INFORMATION_MESSAGE);*/
+
         try {
             GridBagConstraints gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridy = currentPosition.getY();
